@@ -20,13 +20,10 @@ This code shows how to set up an Access Point on the ESP8266 so that my PC or iP
 When you use the example above, your PC or iPad is not connected to the internet anymore. I used this example from  the ESP8266 WiFi examples to set up an Access Point which forwards the traffic to the internet:
 https://github.com/esp8266/Arduino/blob/master/libraries/ESP8266WiFi/examples/RangeExtender-NAPT/RangeExtender-NAPT.ino
 
-Note: you should not download a lot of data while using the MIDI module because this increased the latency. And the bandwidth is very limited. So your downloads will be slower. But it is better than being disconnectec from the internet.
+Note: you should not download a lot of data while using the MIDI module because this increases the latency. And the bandwidth is very limited. So your downloads will be slower. But it is better than being disconnected from the internet completely.
 
 ## Changing the device ID of the MCP4728
-The MCP4728 boards all have the same ID. But you can change the ID so that you can use more that one board.
-
-It was a bit tricky but in the end it worked for me. I used the code from this project.
-
+The MCP4728 boards all have the same ID. But you can change the ID so that you can use more that one board. It was a bit tricky but in the end it worked for me. I used the code from this project:
 https://github.com/TrippyLighting/HPRGB2/blob/master/examples/changeDeviceID/changeDeviceID.ino
 
 See also
@@ -45,6 +42,7 @@ This section describes how all the components work together and how they are con
 * Ground from the ESP8266 into the G input of the MCP4728
 * 3V from the ESP8266 into  the V input of the MCP4728
 * Also: connect the respective inputs of the two MCP4728 boards
+* The trigger output PINs are D3, D4, D5 and D6
 
 ### VCV Rack Modules
 * _CV->MIDI CC_ module https://vcvrack.com/manual/Core#CV-CC
@@ -69,10 +67,10 @@ This will be my next project.
 
 
 ## Findings / Know issues / Limitations
-* The output voltage in this setup is only 3.3v
+* The max output voltage from the MCP4728 modules in this setup is only 3.3v
 * Using the  VCV Rack "CV->MIDI CC" module  0v is MIDI value 0 and 10v is MIDI value 127
   * Negative VCV Rack voltages result in MIDI value 0
-  * Use (for example) the _OFFSET_ module from Bogaudion (https://library.vcvrack.com/Bogaudio/Bogaudio-Offset) to make sure that the voltage is in the correct range from 0v to 10v
+  * Use (for example) the _OFFSET_ module from Bogaudio (https://library.vcvrack.com/Bogaudio/Bogaudio-Offset) to make sure that the voltage is in the correct range from 0v to 10v
 * D2 is also internal LED
   * If D2 is low, the LED is on
   * IF D2 in high, the LED is on
@@ -80,7 +78,7 @@ This will be my next project.
   * Remove the `DBG(F("ControlChange")` line in `setHandleControlChange` if you the latency gets too high
 
 ## Examples
-# Sloth
+### Sloth
 In this example I use the _Sloth Apacy_ module from Nonlinear Circuits (https://library.vcvrack.com/NonlinearCircuits/SlothApathy).
 
 ![Sloth](images/sloth.png)
