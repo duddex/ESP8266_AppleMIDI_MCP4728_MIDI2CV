@@ -5,13 +5,12 @@ In this project I convert MIDI messages to control voltage and triggers via the 
 ## Goals
 I use VCV Rack as my DAW and I wanted to have a hybrid setup where I would be able to send "virtual" control voltage to my real synthesizers. In my case from VCV Rack on my PC (https://vcvrack.com/) or miRack (https://mirack.app/) on my iPad to my AEmodular synth from https://www.tangiblewaves.com/.
 
-I am not good at soldering and I don't have experience designing electrical circuits. So I decided to use a programmable microcontroller (in this case the ESP8266) using Arduino libraries. I just had to combine the examples from two libraries (see details below).
-
 Having 4 output jacks is good. But I thought it would be better to have 8. So I wanted to use two MCP4728. I also wanted to be able to send triggers. For now I use 4 output PINs from the ESP8266.
 
+I am not good at soldering and I don't have experience designing electrical circuits. So I decided to use a programmable microcontroller (in this case the ESP8266) using Arduino libraries. I just had to combine the examples from two libraries (see details below). I plugged everything together on a breadboard.
 
 ## Code from the AppleMIDI-Library example
-To keep the latency low, I wanted to connect my PC or iPad directly to the ESP8266. This example helped me a lot:
+To keep the latency low, I wanted to connect my PC or iPad directly to the ESP8266. My code is based on this example from the AppleMIDI-Library:
 https://github.com/lathoub/Arduino-AppleMIDI-Library/blob/master/examples/ESP8266_NoteOnOffEverySec_softAP_mDNS/ESP8266_NoteOnOffEverySec_softAP_mDNS.ino
 
 This code shows how to set up an Access Point on the ESP8266 so that my PC or iPad can connect to the ESP8266.
@@ -29,7 +28,7 @@ https://github.com/TrippyLighting/HPRGB2/blob/master/examples/changeDeviceID/cha
 See also
 https://forum.arduino.cc/t/mcp4728-x2-with-and-without-multiplexer-tc9548a-resolved/983859
 
-This _i2c-scanner.ino_ Github Gist helped my finding the IDs
+This _i2c-scanner.ino_ Github Gist helped me finding the IDs
 https://gist.github.com/netmaniac/8706f2f7ae5dbfe6498e04bf1cbfde4a
 
 ## How it works
@@ -74,6 +73,8 @@ This will be my next project.
 * D2 is also internal LED
   * If D2 is low, the LED is on
   * IF D2 in high, the LED is on
+* It is possible that the trigger output is too short
+  * You can use the _DGate_ module from Bogaudio (https://library.vcvrack.com/Bogaudio/Bogaudio-DGate) to extend the trigger length. See example below
 * Higher latency when debug output is enabled
   * Remove the `DBG(F("ControlChange")` line in `setHandleControlChange` if you the latency gets too high
 
@@ -90,3 +91,12 @@ The _MULTIVOLTIMETRO_ module is just used for testing. It is not necessary to in
 The output of the _OFFSET_ module is patched into the _CV->MIDI CC_ module and the CC messages are sent to MIDI channel 1 on CC channel 0. On my PC I have connected rtpMIDI to my ESP8266. My computer's name is leonardo. So this is the name that shows up in the _CV->MIDI CC_ module as the name of the MIDI device.
 
 ![rtpMIDI](images/rtpMIDI.png)
+
+### DGate
+When you send triggers which are very short (as triggers usually are because they are triggers) the NoteOn and NoteOff messages are sent almost at the same time. This could lead to dropouts.
+
+You can use the _DGate_ module from Bogaudio (https://library.vcvrack.com/Bogaudio/Bogaudio-DGate) to extend the trigger length.
+
+![rtpMIDI](images/DGate.png)
+
+In this picture you see the trigger as a blue line and the "extended" trigger (gate) as red line. Here I set the gate length to 0.2 seconds.
