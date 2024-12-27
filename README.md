@@ -1,6 +1,7 @@
 # MIDI to CV (ESP8266, MCP4728, AppleMIDI Library)
 In this project I convert MIDI messages to control voltage and triggers via the AppleMIDI using an ESP8266 and two MCP4728.
 
+Change the `STASSID` and `STAPSK` to match your WiFi network settings. The ESP8266 connects to your network and will show up as an Access Point with the postfix "extender". So for example if your network name is "mywifinetwork", the ESP8266 will show up as "mywifinetworkextender"
 
 ## Goals
 I use VCV Rack as my DAW and I wanted to have a hybrid setup where I would be able to send "virtual" control voltage to my real synthesizers. In my case from VCV Rack on my PC (https://vcvrack.com/) or miRack (https://mirack.app/) on my iPad to my AEmodular synth from https://www.tangiblewaves.com/.
@@ -36,12 +37,14 @@ This section describes how all the components work together and how they are con
 
 ### Connections
 * The ESP8266 is powered via the USB input (plugged into a computer or a power bank)
-* D1 of the ESP8266 into the CL input of the MCP4728
-* D2 of the ESP8266 into the DA input of the MCP4728
-* Ground from the ESP8266 into the G input of the MCP4728
-* 3V from the ESP8266 into  the V input of the MCP4728
-* Also: connect the respective inputs of the two MCP4728 boards
-* The trigger output PINs are D3, D4, D5 and D6
+* D1 of the ESP8266 into the CL input of the MCP4728 (long yellow cable)
+* D2 of the ESP8266 into the DA input of the MCP4728 (orange cable)
+* Ground from the ESP8266 into the G input of the MCP4728 (black cable)
+* 3V from the ESP8266 into  the V input of the MCP4728 (red cable)
+* Also: connect the respective inputs of the two MCP4728 boards (short yellow cables)
+* The trigger output PINs are D3, D4, D5 and D6 (green, blue, grey, purple cable)
+
+![Connections](images/IMG_5333.jpg)
 
 ### VCV Rack Modules
 * _CV->MIDI CC_ module https://vcvrack.com/manual/Core#CV-CC
